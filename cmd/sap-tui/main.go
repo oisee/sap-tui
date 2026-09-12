@@ -32,11 +32,10 @@ import (
 	"os/signal"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
-	"unsafe"
 
 	"github.com/gdamore/tcell/v2"
+	"golang.org/x/term"
 	"github.com/oisee/sap-tui/internal/ni"
 
 	"github.com/oisee/sap-tui/internal/cfw"
@@ -103,8 +102,12 @@ func main() {
 			*addr = derived
 		}
 	}
+	// Accept the address as a bare positional argument too: `sap-tui host:port`.
+	if *addr == "" && flag.NArg() > 0 {
+		*addr = flag.Arg(0)
+	}
 	if *addr == "" {
-		fmt.Fprintln(os.Stderr, "tui: --addr host:port is required")
+		fmt.Fprintln(os.Stderr, "usage: sap-tui HOST:PORT   (or --addr HOST:PORT)")
 		os.Exit(2)
 	}
 
@@ -1173,16 +1176,9 @@ func watchQuit(ctx context.Context, cancel context.CancelFunc) {
 // terminalSize asks the controlling terminal for its size in character cells,
 // returning zeros when standard output is not a terminal.
 func terminalSize() (rows, cols int) {
-	type winsize struct{ Row, Col, X, Y uint16 }
-	ws := &winsize{}
-	_, _, errno := syscall.Syscall(
-		syscall.SYS_IOCTL,
-		os.Stdout.Fd(),
-		uintptr(syscall.TIOCGWINSZ),
-		uintptr(unsafe.Pointer(ws)),
-	)
-	if errno != 0 {
+	w, h, err := term.GetSize(int(os.Stdout.Fd()))
+	if err != nil {
 		return 0, 0
 	}
-	return int(ws.Row), int(ws.Col)
+	return h, w
 }
