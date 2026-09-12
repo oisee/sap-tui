@@ -3,24 +3,50 @@
 Connect to a SAP **DIAG** dispatcher and render its screens right in your
 terminal — no SAP GUI required. Read-only, harmless, one static binary.
 
+## Try it live 👀
+
+```sh
+sap-tui demo.desude.su:3200
+```
+
+There's a little something running there. Point your SAP GUI at the same host
+(instance **00**) if you have one — or just watch it here. `q` quits.
+
 ## Use
 
 ```sh
-sap-tui --addr HOST:PORT
-# e.g.
-sap-tui --addr demo.desude.su:3200
+sap-tui HOST:PORT          # positional
+sap-tui --addr HOST:PORT   # or the flag
 ```
-
-Press `q` to quit.
 
 ## Install
 
-Grab a prebuilt binary from the [Releases](../../releases) page (Linux / macOS),
-`chmod +x`, run. Or build it yourself:
+Grab a prebuilt binary from the [Releases](../../releases/latest) page
+(Linux / macOS / Windows), `chmod +x`, run:
 
 ```sh
-go build -o sap-tui ./cmd/sap-tui
+curl -L -o sap-tui https://github.com/oisee/sap-tui/releases/latest/download/sap-tui-macos-arm64
+chmod +x sap-tui
+./sap-tui demo.desude.su:3200
 ```
 
+On macOS, if Gatekeeper blocks the unsigned binary: `xattr -d com.apple.quarantine ./sap-tui`.
+
+Or with Go:
+
+```sh
+go install github.com/oisee/sap-tui/cmd/sap-tui@latest
+```
+
+Or build it yourself: `go build -o sap-tui ./cmd/sap-tui`.
+
+## What's on the other end
+
+The server that generates those screens is **sap-lsd** — a rogue SAP GUI DIAG
+server: **https://github.com/oisee/sap-lsd**. `sap-tui` is just the terminal
+front-end for it.
+
+---
+
 Pure Go, no cgo. MIT licensed. Not affiliated with SAP SE; "SAP" names the
-protocol it speaks.
+protocol this speaks.
