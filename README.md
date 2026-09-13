@@ -46,6 +46,11 @@ The server that generates those screens is **sap-lsd** — a rogue SAP GUI DIAG
 server: **https://github.com/oisee/sap-lsd**. `sap-tui` is just the terminal
 front-end for it.
 
+Both are built on **[open-diag-go](https://github.com/oisee/open-diag-go)** — the
+pure-Go SAP **DIAG** protocol library (read the wire, describe screens, draw them
+on a real SAP GUI) — which in turn uses **[open-rfc-go](https://github.com/oisee/open-rfc-go)**
+for the NI network transport.
+
 ---
 
 Pure Go, no cgo. MIT licensed. Not affiliated with SAP SE; "SAP" names the
