@@ -5,6 +5,8 @@ terminal — no SAP GUI required. Read-only, harmless, one static binary.
 
 ## Try it live 👀
 
+📺 **See it in action:** https://www.youtube.com/watch?v=Pszxxj-OUAk
+
 ```sh
 sap-tui demo.desude.su:3200
 ```
